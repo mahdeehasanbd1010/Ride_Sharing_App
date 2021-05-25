@@ -2,7 +2,7 @@ const schedule = require('node-schedule');
 const http = require('http');
 const io = require ('socket.io-client');
 
-const socket = io.connect('http://localhost:5000/communication');
+const socket = io.connect('http://localhost:5001/communication');
 
 function createDriver() {
     let driver = JSON.stringify({

@@ -1,8 +1,9 @@
 const express = require('express');
 const app = express();
+const tempApp = express();
 const mongoose = require('mongoose');
 const cors = require('cors');
-const server = require('http').createServer(app);
+const server = require('http').createServer(tempApp);
 const schedule = require('node-schedule');
 const url = 'mongodb://localhost/MyDB';
 const Drivers = require('./data_set/Drivers');
@@ -49,7 +50,7 @@ io.of('communication').on('connection', (socket) => {
         console.log('scheduler!!!');
         
         await getDriverRider();
-
+	
         console.log('number of drivers: ' + drivers.length);
         console.log('number of riders: ' + riders.length);
 
@@ -90,9 +91,12 @@ mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology:true});
 const connection = mongoose.connection;
 connection.on('open', () => console.log('mongodb connected...'));
 
-const PORT = process.env.PORT || 5000;
+const PORT1 = process.env.PORT || 5000;
+const PORT2 = process.env.PORT || 5001;
 
-server.listen(PORT, ()=>console.log(`Server started on port ${PORT}`));
+app.listen(PORT1, ()=>console.log(`Server started on port ${PORT1}`));
+server.listen(PORT2, ()=>console.log(`Server started on port ${PORT2}`));
+
 
 
 

@@ -2,15 +2,6 @@ const express = require('express');
 const router = express.Router();
 const riders = require('../data_set/Riders');
 
-router.get('/getAllRider', async (req, res) => {
-    try{
-        await res.json(riders);
-    }catch(err){
-        res.send(err);
-    }
-});
-
-
 router.post('/add', async(req, res) => {
     const rider = {
         name: req.body.name,
@@ -21,7 +12,8 @@ router.post('/add', async(req, res) => {
         status: req.body.status
     };
     try{
-        await riders.push(rider);
+        const result = await riders.push(rider);
+        res.json(result);
     }catch(err){
         res.send(err);
     }

@@ -2,15 +2,6 @@ const express = require('express');
 const drivers = require('../data_set/Drivers');
 const router = express.Router();
 
-router.get('/getAllDriver', async (req, res) => {
-    try{ 
-        await res.json(drivers);
-    }catch(err){
-        res.send(err);
-    }    
-});
-
-
 router.post('/add', async (req, res) => {
     const driver = {
         name: req.body.name,
@@ -20,7 +11,8 @@ router.post('/add', async (req, res) => {
         status: req.body.status
     };
     try{
-        await drivers.push(driver);
+        const result = await drivers.push(driver);
+        res.json(result);
     }catch(err){
         res.send(err);
     }
