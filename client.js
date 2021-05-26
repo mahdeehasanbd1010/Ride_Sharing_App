@@ -1,8 +1,11 @@
-const schedule = require('node-schedule');
-const http = require('http');
-const io = require ('socket.io-client');
+const express = require('express')
+const app = express()
+const io = require('socket.io-client')
+const schedule = require('node-schedule')
+const http = require('http')
 
-const socket = io.connect('http://localhost:5001/communication');
+const socket = io.connect('http://localhost:7004/communication')
+
 
 function createDriver() {
     let driver = JSON.stringify({
@@ -28,19 +31,21 @@ function createRider() {
     return rider;
 }
 
+
 function createRating(name){
     let rating = JSON.stringify({
-        name: name,
+        driver_name: name,
         rating: parseInt(Math.random()*5)
     });
     return rating;
 }
 
+
 function createOptionsDriver(driver) {
     let optionsDriver = {
         hostname: 'localhost',
-        port: 5000,
-        path: '/driver/add',
+        port: 8000,
+        path: '/api/driver/add',
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -54,8 +59,8 @@ function createOptionsDriver(driver) {
 function createOptionsRider(rider) {
     let optionsRider = {
         hostname: 'localhost',
-        port: 5000,
-        path: '/rider/add',
+        port: 8000,
+        path: '/api/rider/add',
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -69,8 +74,8 @@ function createOptionsRider(rider) {
 function createOptionsRating(rating) {
     let optionsRating = {
         hostname: 'localhost',
-        port: 5000,
-        path: '/rating/add',
+        port: 8000,
+        path: '/api/rating/add',
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -96,12 +101,12 @@ const jobRider = schedule.scheduleJob('*/1 * * * * *', async()=>{
 });
 
 
-socket.on('msg1', (data)=>{
-    console.log(data[0] + ' --> ' + data[1] + ' || ride fare = ' + data[2] + '\n');
-    
-    const rating = createRating(data[0]);
-    const optionsRating = createOptionsRating(rating);
-    http.request(optionsRating).write(rating);
+socket.on('msg', (data)=>{
+    const rating = createRating(data)
+    const optionsRating = createOptionsRating(rating)
+    console.log('driver_name: '+data)
 
-});
+    http.request(optionsRating).write(rating)
+})
+
 
