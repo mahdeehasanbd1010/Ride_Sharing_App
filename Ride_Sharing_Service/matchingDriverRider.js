@@ -45,7 +45,7 @@ async function createRating(driverName, riderName, fare){
 
 async function createOptionsRating(rating) {
     let optionsRating = {
-        hostname: 'localhost',
+        hostname: '172.17.0.1',
         port: 7003,
         path: '/rating/add',
         method: 'POST',

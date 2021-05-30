@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const mongoose = require('mongoose')
-const url = 'mongodb://localhost/MyDB';
+const url = 'mongodb://localhost/MyDB'
 
 app.use(cors())
 app.use(express.json())
