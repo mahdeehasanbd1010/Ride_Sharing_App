@@ -45,9 +45,9 @@ io.of('communication').on('connection', (socket)=>{
     
 })
 
-const PORT1 = process.env.PORT || 7003
+const PORT1 = process.env.PORT || 7000
 
-const PORT2 = process.env.PORT || 7004
+const PORT2 = process.env.PORT || 7001
 
 app.listen(PORT1, () => console.log(`Server started on port ${PORT1}`))
 

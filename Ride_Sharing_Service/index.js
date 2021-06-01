@@ -10,7 +10,7 @@ app.use('/api/driver', require('./routes/api/driver'));
 app.use('/api/rider', require('./routes/api/rider'));
 
 
-const PORT = process.env.PORT || 7001
+const PORT = process.env.PORT || 7000
 
 app.listen(PORT, ()=> console.log(`Server started on port ${PORT}`))
 
