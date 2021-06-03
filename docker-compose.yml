@@ -4,6 +4,8 @@ services:
     rating-service:
         build: ./Rating_Service/
         restart: always
+        depends_on: 
+            - mongodb
     
     communication-service:
         build: ./Communication_Service/
