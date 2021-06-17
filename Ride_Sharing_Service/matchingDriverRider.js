@@ -3,6 +3,8 @@ const Drivers = require('./data_set/Drivers')
 const Riders = require('./data_set/Riders')
 const http = require('http')
 
+let location = process.env.LOCATION
+
 let drivers = []
 let riders = []
 
@@ -45,7 +47,7 @@ async function createRating(driverName, riderName, fare){
 
 async function createOptionsRating(rating) {
     let optionsRating = {
-        hostname: 'communication-service',
+        hostname: `communication-service-${location}`,
         port: 7000,
         path: '/rating/add',
         method: 'POST',
@@ -60,7 +62,7 @@ async function createOptionsRating(rating) {
 
 
 const job = schedule.scheduleJob('*/5 * * * * *', async function(){
-    console.log('scheduler!!!')
+    console.log(`scheduler ${location}!!!`)
     await getDriverRider()
 
     console.log('number of drivers: ' + drivers.length)

@@ -4,11 +4,11 @@ server{
 		
 		location /api {
 		
-			proxy_pass http://ride-sharing-service:7000;
+			proxy_pass http://${RSS}:7000;
 		}
 		
 		location /api/rating {
 		
-			proxy_pass http://rating-service:7000;
+			proxy_pass http://${RS}:7000;
 		}
 }

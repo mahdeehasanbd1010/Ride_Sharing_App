@@ -1,40 +1,100 @@
 version: '3'
 
+networks:
+    bdnet:
+      ipam:
+        config:
+          - subnet: 10.100.0.0/24
+
 services: 
     rating-service:
         build: ./Rating_Service/
         restart: always
-    
-    communication-service:
-        build: ./Communication_Service/
-        ports: 
-            - 7001:7001
-        restart: always
+        depends_on: 
+            - mongodb
+        networks:
+            bdnet:
+                ipv4_address: 10.100.0.1    
 
-    ride-sharing-service:
-        build: ./Ride_Sharing_Service/
+    communication-service-dhaka:
+        build: ./Communication_Service/
+        # ports: 
+        #     - 5001:5001
+        restart: always
+        networks:
+            bdnet:
+                ipv4_address: 10.100.0.12
+    
+    ride-sharing-service-dhaka:
+        build: ./RideSharing_Service/
         restart: always
         depends_on: 
-            - communication-service
-    
-    nginx:
+            - communication-service-dhaka
+        environment: 
+            - SERVERLOCATION=dhaka
+        networks:
+            bdnet:
+                ipv4_address: 10.100.0.11
+
+    nginx-dhaka:
         build: ./nginx/
-        ports: 
-            - 8080:80
+        # ports: 
+        #     - 7000:80
         depends_on: 
             - rating-service
-            - ride-sharing-service
+            - ride-sharing-service-dhaka
+        environment: 
+            - API_V1=ride-sharing-service-dhaka
+            - API_V2=rating-service
+        command: /bin/sh -c "envsubst < /etc/nginx/conf.d/nginx.conf.template > /etc/nginx/conf.d/nginx.conf && nginx -g 'daemon off;'" 
+        networks:
+            bdnet:
+                ipv4_address: 10.100.0.10
+
+    communication-service-chittagong:
+        build: ./Communication_Service/
+        # ports: 
+        #     - 5002:5001
+        restart: always
+        networks:
+            bdnet:
+                ipv4_address: 10.100.0.22
+                
+    ride-sharing-service-chittagong:
+        build: ./RideSharing_Service/
+        restart: always
+        depends_on: 
+            - communication-service-chittagong
+        environment: 
+            - LOCATION=chittagong
+        networks:
+            bdnet:
+                ipv4_address: 10.100.0.21
+            
+    nginx-chittagong:
+        build: ./nginx/
+        # ports: 
+        #     - 7000:80
+        depends_on: 
+            - rating-service
+            - ride-sharing-service-chittagong
+        environment: 
+            - RSS=ride-sharing-service-chittagong
+            - RS=rating-service
+        command: /bin/sh -c "envsubst < /etc/nginx/conf.d/nginx.conf.template > /etc/nginx/conf.d/nginx.conf && nginx -g 'daemon off;'" 
+        networks:
+            bdnet:
+                ipv4_address: 10.100.0.20
+
     mongodb:
         image: mongo
         ports: 
             - 27017:27017
-        volumes: 
+        volumes:
             - data:/data/db
-
-volumes: 
+        networks:
+            bdnet:
+                ipv4_address: 10.100.0.2
+    
+volumes:
     data:
-
-
-
-
-
