@@ -14,7 +14,7 @@ services:
             - mongodb
         networks:
             bdnet:
-                ipv4_address: 10.100.0.1    
+                ipv4_address: 10.100.0.4    
 
     communication-service-dhaka:
         build: ./Communication_Service/
@@ -23,18 +23,18 @@ services:
         restart: always
         networks:
             bdnet:
-                ipv4_address: 10.100.0.12
+                ipv4_address: 10.100.0.22
     
     ride-sharing-service-dhaka:
-        build: ./RideSharing_Service/
+        build: ./Ride_Sharing_Service/
         restart: always
         depends_on: 
             - communication-service-dhaka
         environment: 
-            - SERVERLOCATION=dhaka
+            - LOCATION=dhaka
         networks:
             bdnet:
-                ipv4_address: 10.100.0.11
+                ipv4_address: 10.100.0.21
 
     nginx-dhaka:
         build: ./nginx/
@@ -44,12 +44,12 @@ services:
             - rating-service
             - ride-sharing-service-dhaka
         environment: 
-            - API_V1=ride-sharing-service-dhaka
-            - API_V2=rating-service
+            - RSS=ride-sharing-service-dhaka
+            - RS=rating-service
         command: /bin/sh -c "envsubst < /etc/nginx/conf.d/nginx.conf.template > /etc/nginx/conf.d/nginx.conf && nginx -g 'daemon off;'" 
         networks:
             bdnet:
-                ipv4_address: 10.100.0.10
+                ipv4_address: 10.100.0.20
 
     communication-service-chittagong:
         build: ./Communication_Service/
@@ -58,10 +58,10 @@ services:
         restart: always
         networks:
             bdnet:
-                ipv4_address: 10.100.0.22
+                ipv4_address: 10.100.0.32
                 
     ride-sharing-service-chittagong:
-        build: ./RideSharing_Service/
+        build: ./Ride_Sharing_Service/
         restart: always
         depends_on: 
             - communication-service-chittagong
@@ -69,7 +69,7 @@ services:
             - LOCATION=chittagong
         networks:
             bdnet:
-                ipv4_address: 10.100.0.21
+                ipv4_address: 10.100.0.31
             
     nginx-chittagong:
         build: ./nginx/
@@ -84,7 +84,7 @@ services:
         command: /bin/sh -c "envsubst < /etc/nginx/conf.d/nginx.conf.template > /etc/nginx/conf.d/nginx.conf && nginx -g 'daemon off;'" 
         networks:
             bdnet:
-                ipv4_address: 10.100.0.20
+                ipv4_address: 10.100.0.30
 
     mongodb:
         image: mongo
@@ -94,7 +94,7 @@ services:
             - data:/data/db
         networks:
             bdnet:
-                ipv4_address: 10.100.0.2
+                ipv4_address: 10.100.0.5
     
 volumes:
     data:
