@@ -4,7 +4,9 @@ const io = require('socket.io-client')
 const schedule = require('node-schedule')
 const http = require('http')
 
-const socket = io.connect('http://localhost:7001/communication')
+let location = 'dhaka'
+
+const socket = io.connect(`http://communication.${location}.com:7001/communication`)
 
 
 function createDriver() {
@@ -43,8 +45,8 @@ function createRating(name){
 
 function createOptionsDriver(driver) {
     let optionsDriver = {
-        hostname: 'localhost',
-        port: 8080,
+        hostname: `server.${location}.com`,
+        // port: 8080,
         path: '/api/driver/add',
         method: 'POST',
         headers: {
@@ -58,8 +60,8 @@ function createOptionsDriver(driver) {
 
 function createOptionsRider(rider) {
     let optionsRider = {
-        hostname: 'localhost',
-        port: 8080,
+        hostname: `server.${location}.com`,
+        // port: 8080,
         path: '/api/rider/add',
         method: 'POST',
         headers: {
@@ -73,8 +75,8 @@ function createOptionsRider(rider) {
 
 function createOptionsRating(rating) {
     let optionsRating = {
-        hostname: 'localhost',
-        port: 8080,
+        hostname: `server.${location}.com`,
+        // port: 8080,
         path: '/api/rating/add',
         method: 'POST',
         headers: {
